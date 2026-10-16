@@ -41,14 +41,33 @@ var legendLines = []string{
 	"MOUSE POR TECLADO - modo cursor activo",
 	"",
 	"Ctrl+Alt+M  volver al teclado        Esc  salir del modo cursor",
-	"Flechas o WASD  mover      F (pisado) turbo      Z (pisado) 1 px",
-	"+ y -  cambian la velocidad",
+	"Tab  cambiar las flechas entre PUNTERO y SCROLL + ZOOM",
+	"Flechas  " + arrowModeLinePointer,
 	"",
 	"Espacio  click          Shift+Espacio  ampliar seleccion",
 	"Ctrl+Espacio  click derecho (menu)   Alt+Espacio  click medio",
 	"Espacio 2-3 veces  doble o triple click",
 	"Espacio + mover  arrastrar",
-	"RePag / AvPag  scroll    Ctrl+Alt+Inicio o Fin  esquina de pantalla",
+	"F (pisado) turbo   Z (pisado) 1 px   + y - velocidad",
+	"RePag / AvPag  scroll    Ctrl+Alt+Inicio o Fin  esquina",
+}
+
+const arrowModeLinePointer = "mueven el puntero"
+const arrowModeLineScroll = "arriba/abajo scroll, izquierda/derecha zoom"
+
+// arrowModeLines devuelve el texto con el modo de flechas actual.
+func arrowModeLines() []string {
+	lines := make([]string, len(legendLines))
+	copy(lines, legendLines)
+	for i, l := range lines {
+		if l == "Flechas  "+arrowModeLinePointer {
+			if st.arrowScroll {
+				lines[i] = "Flechas  " + arrowModeLineScroll
+			}
+			break
+		}
+	}
+	return lines
 }
 
 func showLegend() {
@@ -162,7 +181,7 @@ func drawLegend() {
 	pSetBkMode.Call(legendBmpDC, 1 /* TRANSPARENT */)
 
 	y := 14
-	for i, line := range legendLines {
+	for i, line := range arrowModeLines() {
 		if line == "" {
 			y += 14
 			continue

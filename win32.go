@@ -68,6 +68,7 @@ const (
 	vkMenu     = 0x12
 	vkPause    = 0x13
 	vkEscape   = 0x1B
+	vkTab      = 0x09
 	vkOemPlus  = 0xBB // la tecla + del teclado numerico
 	vkOemMinus = 0xBD // la tecla - del teclado numerico
 	vkSpace    = 0x20
@@ -104,6 +105,12 @@ type (
 		DwExtraInfo uintptr
 	}
 
+	keyboardInput struct {
+		WVk, WScan    uint16
+		DwFlags, Time uint32
+		DwExtraInfo   uintptr
+	}
+
 	mouseInput struct {
 		Dx, Dy      int32
 		MouseData   uint32
@@ -112,11 +119,21 @@ type (
 		DwExtraInfo uintptr
 	}
 
-	// INPUT con la union explicita: solo usamos la parte de mouse.
+	// OJO: INPUT mide 40 bytes en x64 y la union interna 32. Si se le agregan
+	// campos a la union, la struct crece, SendInput recibe un tamano invalido y
+	// deja de funcionar en silencio (devuelve 0). Por eso mouse y teclado tienen
+	// estructuras separadas, cada una de 40 bytes, y el selftest lo verifica.
 	input struct {
 		Type uint32
 		_    uint32
 		Mi   mouseInput
+	}
+
+	inputKeyboard struct {
+		Type uint32
+		_    uint32
+		Ki   keyboardInput
+		_    [8]byte // la union se completa hasta 32 bytes
 	}
 
 	size struct{ Cx, Cy int32 }
@@ -288,6 +305,22 @@ func modMask() int {
 		m |= 4
 	}
 	return m
+}
+
+// inputSizeMouse e inputSizeKeyboard son los tamanos que SendInput exige.
+const (
+	inputSizeMouse    = 40
+	inputSizeKeyboard = 40
+)
+
+// sendKeyboardInput manda un INPUT de teclado, por ejemplo el Ctrl del zoom.
+func sendKeyboardInput(in inputKeyboard) uintptr {
+	if unsafe.Sizeof(in) != inputSizeKeyboard {
+		logf("ERROR: inputKeyboard mide %d bytes y deberia medir 40", unsafe.Sizeof(in))
+		return 0
+	}
+	r, _, _ := pSendInput.Call(1, uintptr(unsafe.Pointer(&in)), inputSizeKeyboard)
+	return uintptr(r)
 }
 
 func sendInput(inputs []input) uint32 {

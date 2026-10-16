@@ -63,7 +63,8 @@ click derecho abre el menú (activar/desactivar, ayuda, salir).
 
 | Tecla | Acción |
 | --- | --- |
-| Flechas, `W` `A` `S` `D` | Mover el puntero |
+| Flechas, `W` `A` `S` `D` | Mover el puntero (o scroll y zoom, segun `Tab`) |
+| `Tab` | Cambiar que hacen las flechas: puntero <-> scroll + zoom |
 | Mantener `F` mientras movés | Turbo (rápido) |
 | Mantener `Z` mientras movés | Paso a 1 px, para apuntar justo |
 | `+` / `-` | Subir o bajar la velocidad base |
@@ -73,7 +74,7 @@ click derecho abre el menú (activar/desactivar, ayuda, salir).
 | `Alt` + `Espacio` | Click medio |
 | `Espacio` 2-3 veces seguidas | Doble / triple click |
 | Mantener `Espacio` + mover | Arrastrar (drag & drop) |
-| `RePág` / `AvPág` | Scrollear |
+| `RePág` / `AvPág` | Scrollear (siempre, diga lo que diga `Tab`) |
 | `Alt` + `↑` / `↓` | Scrollear |
 | `Alt` + `Inicio` / `Fin` | Scroll al extremo |
 | `Alt` + `Shift` + `←` / `→` | Scroll horizontal |
@@ -113,6 +114,26 @@ desaparece en cuanto salís del modo. Si preferís no verla, arrancala con
 `-nolegend`.
 
 Para la ayuda completa cuando quieras: `Ctrl+Alt+H`.
+
+### Por qué `Tab` cambia el significado de las flechas
+
+Las flechas solo pueden significar una cosa a la vez, y las tres que hacen falta
+son: mover el puntero, recorrer el contenido y hacer zoom. `Tab` alterna entre la
+primera y las otras dos:
+
+| Modo | `↑` `↓` | `←` `→` | `W` `S` / `A` `D` |
+| --- | --- | --- | --- |
+| **PUNTERO** (por defecto) | mueven | mueven | igual que las flechas |
+| **SCROLL + ZOOM** | scrollean | zoom | igual que las flechas |
+
+Con `Tab` volvés. Arranca siempre en modo puntero cada vez que activás el modo
+cursor, el tooltip de la bandeja dice en qué modo está, y la leyenda en pantalla
+vuelve a aparecer mostrando el cambio.
+
+El zoom se inyecta como `Ctrl`+rueda, que es lo que entienden los navegadores, el
+Office y casi todo lector de PDF. En Windows no existe una tecla de zoom
+universal, así que en apps que no usen esa combinación las flechas sencillamente
+no harán nada en ese modo.
 
 ### Por qué la velocidad tiene teclas propias
 

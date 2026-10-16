@@ -157,6 +157,9 @@ func hookTrampoline(nCode int32, wParam, lParam uintptr) uintptr {
 				return 1
 			case vkKeyF, vkKeyZ:
 				return 1 // solo existen como modificadores de velocidad
+			case vkTab:
+				toggleArrowMode()
+				return 1
 			}
 		}
 

@@ -85,7 +85,7 @@ func updateTray() {
 	}
 	tip := "Mouse por teclado - velocidad " + itoa(st.speed) + " px - modo cursor OFF"
 	if st.cursorMode {
-		tip = "Mouse por teclado - velocidad " + itoa(st.speed) + " px - modo cursor ON"
+		tip = "Mouse por teclado - flechas: " + arrowModeName() + " - velocidad " + itoa(st.speed) + " px"
 	}
 	nid := notifyIconData{
 		CbSize: uint32(unsafe.Sizeof(notifyIconData{})),

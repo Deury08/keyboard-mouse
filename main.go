@@ -235,6 +235,7 @@ func runSelfTest() int {
 	defer uninstallHook()
 
 	size := int(unsafe.Sizeof(input{}))
+	sizeKb := int(unsafe.Sizeof(inputKeyboard{}))
 	// un evento de rueda: prueba que SendInput llega al sistema
 	before, _ := cursorPos()
 	wheel := sendInput([]input{mouseEvent(fWheel, 0, 0, 120)})
@@ -243,10 +244,11 @@ func runSelfTest() int {
 
 	moved := before.X != after.X || before.Y != after.Y
 	fmt.Printf("INPUT struct: %d bytes (x64 esperado 40)\n", size)
+	fmt.Println("INPUT teclado:", sizeKb, "bytes (x64 esperado 40)")
 	fmt.Printf("SendInput rueda: %d evento(s)\n", wheel)
 	fmt.Printf("Cursor antes: %d,%d  despues: %d,%d\n", before.X, before.Y, after.X, after.Y)
 
-	if size != 40 || wheel != 1 || moved {
+	if size != inputSizeMouse || sizeKb != inputSizeKeyboard || wheel != 1 || moved {
 		fmt.Println("SELFTEST: FAIL")
 		return 1
 	}

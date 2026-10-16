@@ -62,7 +62,8 @@ the menu (toggle, help, quit).
 
 | Key | Action |
 | --- | --- |
-| Arrow keys, `W` `A` `S` `D` | Move the pointer |
+| Arrow keys, `W` `A` `S` `D` | Move the pointer (or scroll and zoom — see `Tab`) |
+| `Tab` | Switch what the arrow keys do: pointer ↔ scroll + zoom |
 | Hold `F` while moving | Turbo (fast) |
 | Hold `Z` while moving | 1 px steps, for precise aiming |
 | `+` / `-` | Make the base speed faster or slower |
@@ -72,7 +73,7 @@ the menu (toggle, help, quit).
 | `Alt` + `Space` | Middle click |
 | `Space` 2-3 times | Double / triple click |
 | Hold `Space` + move | Drag and drop |
-| `PgUp` / `PgDn` | Scroll |
+| `PgUp` / `PgDn` | Scroll (always available, whatever `Tab` is set to) |
 | `Alt` + `↑` / `↓` | Scroll |
 | `Alt` + `Home` / `End` | Scroll to the extreme |
 | `Alt` + `Shift` + `←` / `→` | Horizontal scroll |
@@ -112,6 +113,25 @@ a click, and it hides as soon as you leave the mode. Start the app with
 `-nolegend` if you would rather not see it.
 
 For the full help at any moment: `Ctrl+Alt+H`.
+
+### Why `Tab` switches the meaning of the arrow keys
+
+Arrows can only mean one thing at a time, and the three things actually needed
+are: move the pointer, scroll the content, and zoom. `Tab` alternates between
+the first one and the other two:
+
+| Mode | `↑` `↓` | `←` `→` | `W` `S` / `A` `D` |
+| --- | --- | --- | --- |
+| **POINTER** (default) | move | move | same as the arrows |
+| **SCROLL + ZOOM** | scroll | zoom | same as the arrows |
+
+Press `Tab` again to go back. It starts in pointer mode every time cursor mode is
+activated, the tray tooltip says which mode is active, and the on-screen legend
+comes back showing the change.
+
+Zoom is injected as `Ctrl`+wheel, which is what browsers, Office and most PDF
+readers understand. Windows has no universal zoom keystroke, so in apps that do
+not use that combination the arrows will simply do nothing in that mode.
 
 ### Why speed lives on its own keys
 

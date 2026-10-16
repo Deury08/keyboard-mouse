@@ -41,7 +41,12 @@ type appState struct {
 	showCross  bool
 	verbose    bool
 	freeKeys   bool // en modo cursor, dejar pasar todas las teclas
-	showLegend bool // mostrar la leyenda al activar el modo cursor
+
+	// Modo de las flechas, alternado con Tab:
+	//   arrowPointer -> mueven el puntero
+	//   arrowScroll  -> arriba/abajo scrollean, izquierda/derecha hacen zoom
+	arrowScroll bool
+	showLegend  bool // mostrar la leyenda al activar el modo cursor
 
 	lastActivity time.Time
 
@@ -297,6 +302,58 @@ func releaseButtonAt() {
 	st.btnKind = 0
 }
 
+// toggleArrowMode alterna el significado de las flechas: mover el puntero, o
+// scroll + zoom. Con Tab se vuelve al anterior.
+func toggleArrowMode() {
+	st.arrowScroll = !st.arrowScroll
+	if st.arrowScroll {
+		logf("flechas: ARRIBA/ABAJO scroll, IZQUIERDA/DERECHA zoom")
+	} else {
+		logf("flechas: mueven el puntero")
+	}
+	// se vuelve a mostrar la leyenda para dejar claro el modo actual
+	if st.showLegend {
+		if legendVisible {
+			hideLegend()
+		}
+		showLegend()
+	}
+	updateTray()
+}
+
+func arrowModeName() string {
+	if st.arrowScroll {
+		return "SCROLL + ZOOM"
+	}
+	return "PUNTERO"
+}
+
+// zoom inyecta Ctrl+rueda, que es lo que entienden los navegadores, el Office y
+// casi todo lector de PDF. La app recibe el estado real de Ctrl porque se
+// inyecta el keydown antes de la rueda.
+func zoom(direction int) {
+	tapVirtualKey(vkControl, false)
+	scroll(direction*2, false)
+	tapVirtualKey(vkControl, true)
+}
+
+// tapVirtualKey manda un keydown/keyup desde la propia app. Se usa para el
+// Ctrl del zoom, para que la app vea el estado real del modificador.
+func tapVirtualKey(vk int32, up bool) {
+	const (
+		inputKeyboardEvent = 1
+		keyEventKeyUp      = 0x0002
+	)
+	flags := uint32(0)
+	if up {
+		flags = keyEventKeyUp
+	}
+	in := inputKeyboard{Type: inputKeyboardEvent}
+	in.Ki.WVk = uint16(vk)
+	in.Ki.DwFlags = flags
+	sendKeyboardInput(in)
+}
+
 // adjustSpeed cambia la velocidad base con las teclas + y -.
 func adjustSpeed(delta int) {
 	st.speed += delta
@@ -367,6 +424,26 @@ func tick() {
 	// Velocidad con teclas dedicadas: F es turbo y Z es paso a 1 px.
 	// Shift y Ctrl quedan libres para los atajos de la app de adelante, que es
 	// lo que hace util tener teclado y mouse en el mismo aparato.
+	if st.arrowScroll {
+		// Con Tab se eligio el modo scroll + zoom: las flechas ya no mueven el
+		// puntero, scrollean y hacen zoom.
+		if keyTracked(vkDown) || keyTracked(vkKeyS) {
+			scroll(3, false)
+		}
+		if keyTracked(vkUp) || keyTracked(vkKeyW) {
+			scroll(-3, false)
+		}
+		if keyTracked(vkRight) || keyTracked(vkKeyD) {
+			zoom(+1)
+		}
+		if keyTracked(vkLeft) || keyTracked(vkKeyA) {
+			zoom(-1)
+		}
+		clampToScreen()
+		followCursor()
+		return
+	}
+
 	fast := keyTracked(vkKeyF)
 	precise := keyTracked(vkKeyZ)
 	step := st.speed
@@ -391,6 +468,7 @@ func setCursorMode(on bool) {
 		releaseAll()
 		hideIndicator()
 		hideLegend()
+		st.arrowScroll = false
 	} else {
 		st.lastActivity = time.Now()
 		clearTrackedKeys()
