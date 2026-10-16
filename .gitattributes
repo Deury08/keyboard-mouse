@@ -1,0 +1,14 @@
+# Git debe guardar los archivos con finales de linea LF (los de Linux y GitHub),
+# y convertirlos a CRLF solo al chequear el codigo en Windows. Asi el repo no
+# cambia de finales de linea segun quien lo clonee, y desaparecen los avisos
+# "LF will be replaced by CRLF".
+* text=auto eol=lf
+
+# Los .bat y .cmd dependen de CRLF para funcionar en Windows.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Los archivos generados no se versionan.
+mouse-teclado.exe binary
+*.log binary
+*.bmp binary
