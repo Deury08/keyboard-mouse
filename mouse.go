@@ -404,7 +404,10 @@ func showHelp() {
 		"Flechas / WASD  mover\n" +
 		"F (pisado) = turbo    Z (pisado) = paso a 1 px\n" +
 		"+ y -  cambian la velocidad base\n" +
-		"Espacio  click izq.   Shift+Espacio  der.   Ctrl+Espacio  medio\n" +
+		"Espacio  click izquierdo (siempre)\n" +
+		"Shift+Espacio  click izquierdo + Shift (ampliar seleccion)\n" +
+		"Ctrl+Espacio  click derecho (menu contextual)\n" +
+		"Alt+Espacio  click medio\n" +
 		"Tocar Espacio 2-3 veces = doble / triple click\n" +
 		"Mantener Espacio + mover = arrastrar (drag & drop)\n" +
 		"RePag / AvPag  scroll    Alt+Arriba/Abajo  scroll\n" +

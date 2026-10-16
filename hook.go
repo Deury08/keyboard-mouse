@@ -112,10 +112,18 @@ func hookTrampoline(nCode int32, wParam, lParam uintptr) uintptr {
 			if st.btnDown {
 				return 1 // ya estaba presionado
 			}
+			// Boton que se manda:
+			//   sin modificador      -> click izquierdo
+			//   Ctrl  -> click derecho (menu contextual)
+			//   Alt   -> click medio
+			//   Shift -> click izquierdo con Shift, que es como se amplía
+			//            una seleccion. No hace falta inyectar el modificador:
+			//            el usuario lo tiene apretado de verdad y Windows lo lee
+			//            del estado real cuando llega el click.
 			kind := btnLeft
-			if shift {
+			if ctrl {
 				kind = btnRight
-			} else if ctrl {
+			} else if alt {
 				kind = btnMiddle
 			}
 			logf("espacio abajo: boton %d en %d,%d (modo cursor %v)",

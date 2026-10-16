@@ -67,8 +67,9 @@ the menu (toggle, help, quit).
 | Hold `Z` while moving | 1 px steps, for precise aiming |
 | `+` / `-` | Make the base speed faster or slower |
 | `Space` | Primary click |
-| `Shift` + `Space` | Secondary click (context menu) |
-| `Ctrl` + `Space` | Middle click |
+| `Shift` + `Space` | Primary click **with Shift**: extend the selection |
+| `Ctrl` + `Space` | Secondary click (context menu) |
+| `Alt` + `Space` | Middle click |
 | `Space` 2-3 times | Double / triple click |
 | Hold `Space` + move | Drag and drop |
 | `PgUp` / `PgDn` | Scroll |
@@ -77,7 +78,6 @@ the menu (toggle, help, quit).
 | `Alt` + `Shift` + `←` / `→` | Horizontal scroll |
 | `Ctrl+Alt+Home` / `Ctrl+Alt+End` | Jump to a screen corner |
 | `Ctrl`+`A`/`C`/`V`/`X`/`E`/`Z` and any other combination | Select, copy, paste, cut, edit, undo |
-| `Shift`+click | Extend the selection from the last click |
 | `Ctrl+Alt+H` | On-screen help |
 | `Ctrl+Alt+Q` | Quit |
 
@@ -125,10 +125,24 @@ app in front of you.
 
 What is blocked is the **bare key**. Any combination carrying `Ctrl`, `Shift` or
 `Alt` passes straight through, because that is what makes the tool usable with
-both hands on one device: you select text with the mouse — drag, or click before
-and `Shift`+click after — and then press `Ctrl+C` to copy, `Ctrl+V` to paste.
-Modifiers on their own also always pass, since swallowing them would make Windows
-think they are stuck and break every combination.
+both hands on one device: you select text with the mouse and then press `Ctrl+C`
+to copy, `Ctrl+V` to paste. Modifiers on their own also always pass, since
+swallowing them would make Windows think they are stuck and break every
+combination.
+
+Clicks work the same way. `Space` is always the left button, and the modifier you
+are physically holding rides along with the click, exactly like a real mouse:
+
+- `Shift`+`Space` — click **with Shift**: extend a selection from the last click
+- `Ctrl`+`Space` — right button: context menu
+- `Alt`+`Space` — middle button
+
+Nothing is injected to fake the modifier: you really are holding Shift, and
+Windows reads that state when the click lands, so the app sees a genuine
+Shift+click.
+
+So the full selection workflow is: click at the start, `Shift`+click at the end
+(or drag), then `Ctrl+C`.
 
 To get the previous behaviour back, run it with `-freekeys`.
 

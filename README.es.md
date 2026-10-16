@@ -68,8 +68,9 @@ click derecho abre el menú (activar/desactivar, ayuda, salir).
 | Mantener `Z` mientras movés | Paso a 1 px, para apuntar justo |
 | `+` / `-` | Subir o bajar la velocidad base |
 | `Espacio` | Click primario |
-| `Shift` + `Espacio` | Click secundario (menú contextual) |
-| `Ctrl` + `Espacio` | Click medio |
+| `Shift` + `Espacio` | Click primario **con Shift**: ampliar la selección |
+| `Ctrl` + `Espacio` | Click secundario (menú contextual) |
+| `Alt` + `Espacio` | Click medio |
 | `Espacio` 2-3 veces seguidas | Doble / triple click |
 | Mantener `Espacio` + mover | Arrastrar (drag & drop) |
 | `RePág` / `AvPág` | Scrollear |
@@ -78,7 +79,6 @@ click derecho abre el menú (activar/desactivar, ayuda, salir).
 | `Alt` + `Shift` + `←` / `→` | Scroll horizontal |
 | `Ctrl+Alt+Inicio` / `Ctrl+Alt+Fin` | Saltar a una esquina de la pantalla |
 | `Ctrl`+`A`/`C`/`V`/`X`/`E`/`Z` y cualquier otra combinación | Seleccionar, copiar, pegar, cortar, editar, deshacer |
-| `Shift`+click | Amplía la selección desde el último click |
 | `Ctrl+Alt+H` | Ayuda en pantalla |
 | `Ctrl+Alt+Q` | Cerrar la app |
 
@@ -127,10 +127,25 @@ la app de adelante.
 
 Lo que se bloquea es la **tecla suelta**. Cualquier combinación que lleve `Ctrl`,
 `Shift` o `Alt` pasa de largo, porque eso es lo que hace la herramienta usable con
-las dos manos en un solo aparato: seleccionás texto con el mouse — arrastrando, o
-click antes y `Shift`+click después — y después apretás `Ctrl+C` para copiar o
-`Ctrl+V` para pegar. Los modificadores sueltos también pasan siempre: si se
-tragaran, Windows creería que quedaron pegados y rompería cualquier combinación.
+las dos manos en un solo aparato: seleccionás texto con el mouse y después apretás
+`Ctrl+C` para copiar o `Ctrl+V` para pegar. Los modificadores sueltos también
+pasan siempre: si se tragaran, Windows creería que quedaron pegados y rompería
+cualquier combinación.
+
+Los clicks funcionan igual. `Espacio` es siempre el botón izquierdo, y el
+modificador que tenés apretado de verdad viaja con el click, como con un mouse
+real:
+
+- `Shift`+`Espacio` — click **con Shift**: amplía la selección desde el último click
+- `Ctrl`+`Espacio` — botón derecho: menú contextual
+- `Alt`+`Espacio` — botón del medio
+
+No se inyecta nada para falsear el modificador: vos lo tenés apretado de verdad y
+Windows lee ese estado cuando llega el click, así que la app recibe un
+`Shift`+click genuino.
+
+El flujo completo de selección es: click donde empieza, `Shift`+click donde
+termina (o arrastrando), y después `Ctrl+C`.
 
 Si preferís el comportamiento anterior, arrancala con `-freekeys`.
 
