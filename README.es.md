@@ -104,6 +104,16 @@ el secundario. La versión final mejora dos cosas:
   como se pidió, pero solo dentro del modo cursor para no romper combinaciones
   que usan editores y terminales.
 
+### La leyenda en pantalla
+
+Cada vez que se activa el modo cursor aparece arriba una leyenda chica con el
+mapa de teclas actual, y se oculta sola a los 9 segundos. Es una ventana layered
+con margen transparente y `HTTRANSPARENT`, así que nunca se queda con un click, y
+desaparece en cuanto salís del modo. Si preferís no verla, arrancala con
+`-nolegend`.
+
+Para la ayuda completa cuando quieras: `Ctrl+Alt+H`.
+
 ### Por qué la velocidad tiene teclas propias
 
 `Shift` y `Ctrl` arrancaron como modificadores de velocidad — `Shift` para turbo y
@@ -173,6 +183,7 @@ coma los clicks.
 | `-autoexit` | `45` | segundos de inactividad para apagar el modo cursor (`0` = nunca) |
 | `-togglekey` | `Ctrl+Alt+M` | tecla o combinación para cambiar de modo |
 | `-nocross` | off | no muestra la cruceta roja |
+|- `-nolegend` | off | no muestra la leyenda de teclas al activar el modo cursor |
 | `-freekeys` | off | en modo cursor deja pasar todas las teclas |
 | `-debug` | off | log detallado (cada tecla y cada movimiento) |
 | `-version` | — | muestra la versión y sale |

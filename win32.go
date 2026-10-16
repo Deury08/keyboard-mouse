@@ -32,9 +32,11 @@ const (
 	wmKeyUp      = 0x0101
 	wmSysKeyUp   = 0x0105
 	wmNCHitTest  = 0x0084
-	wmApp        = 0x8000
-	wmTray       = wmApp + 1
-	wmNull       = 0x0000
+
+	defaultGuiFont = 17 // DEFAULT_GUI_FONT
+	wmApp          = 0x8000
+	wmTray         = wmApp + 1
+	wmNull         = 0x0000
 )
 
 const (
@@ -224,6 +226,11 @@ var (
 	pCreateCompatibleDC  = gdi32.NewProc("CreateCompatibleDC")
 	pDeleteDC            = gdi32.NewProc("DeleteDC")
 	pCreateDIBSection    = gdi32.NewProc("CreateDIBSection")
+	pCreateFont          = gdi32.NewProc("CreateFontW")
+	pSetTextColor        = gdi32.NewProc("SetTextColor")
+	pSetBkMode           = gdi32.NewProc("SetBkMode")
+	pTextOut             = gdi32.NewProc("TextOutW")
+	pGetStockObject      = gdi32.NewProc("GetStockObject")
 	pGetLastError        = kernel32.NewProc("GetLastError")
 	pIsWindowVisible     = user32.NewProc("IsWindowVisible")
 	pGetWindowLong       = user32.NewProc("GetWindowLongPtrW")
@@ -323,3 +330,6 @@ func getCurrentThreadId() uint32 {
 	r, _, _ := pGetCurrentThreadId.Call()
 	return uint32(r)
 }
+
+// syscallUTF16 es un atajo para no importar syscall en todos lados.
+func syscallUTF16(s string) ([]uint16, error) { return syscall.UTF16FromString(s) }

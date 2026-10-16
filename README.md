@@ -103,6 +103,16 @@ the secondary one. The final version improves two things:
   as requested, but only inside cursor mode so they do not steal combinations that
   editors and terminals rely on.
 
+### The on-screen legend
+
+Every time cursor mode starts, a small legend appears at the top of the screen
+with the current key map, and disappears on its own after 9 seconds. It is a
+layered window with a transparent margin and `HTTRANSPARENT`, so it never steals
+a click, and it hides as soon as you leave the mode. Start the app with
+`-nolegend` if you would rather not see it.
+
+For the full help at any moment: `Ctrl+Alt+H`.
+
 ### Why speed lives on its own keys
 
 `Shift` and `Ctrl` started out as the speed modifiers — `Shift` for turbo, `Ctrl`
@@ -170,6 +180,7 @@ clicks.
 | `-autoexit` | `45` | idle seconds before cursor mode switches off (`0` = never) |
 | `-togglekey` | `Ctrl+Alt+M` | key or combination that toggles the mode |
 | `-nocross` | off | hide the red crosshair |
+|- `-nolegend` | off | do not show the key legend when cursor mode starts |
 | `-freekeys` | off | let every key through in cursor mode |
 | `-debug` | off | verbose logging (every key, every move) |
 | `-version` | — | print the version and exit |

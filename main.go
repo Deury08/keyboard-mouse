@@ -32,6 +32,7 @@ var (
 	optAutoExit  = flag.Int("autoexit", 45, "segundos de inactividad para apagar el modo cursor (0 = nunca)")
 	optToggleKey = flag.String("togglekey", "Ctrl+Alt+M", "tecla o combinacion para cambiar teclado <-> mouse")
 	optNoCross   = flag.Bool("nocross", false, "no muestra la cruceta roja del cursor")
+	optNoLegend  = flag.Bool("nolegend", false, "no muestra la leyenda al activar el modo cursor")
 	optFreeKeys  = flag.Bool("freekeys", false, "en modo cursor deja pasar todas las teclas (por defecto solo las del mouse)")
 	optDebug     = flag.Bool("debug", false, "log detallado en stderr")
 	optVersion   = flag.Bool("version", false, "muestra la version y sale")
@@ -46,6 +47,15 @@ const (
 )
 
 func main() {
+	// El ejecutable es de subsistema GUI: un panic no se ve en ninguna parte.
+	// Se registra en el archivo de log para no perder el diagnostico.
+	defer func() {
+		if r := recover(); r != nil {
+			logf("PANIC: %v", r)
+			messageBox(0, "Error interno:\n\n"+toString(r), "Mouse por teclado", 0x10)
+		}
+	}()
+
 	flag.Parse()
 
 	if *optVersion {
@@ -86,6 +96,7 @@ func main() {
 	st.toggleMod = mod
 	st.showCross = !*optNoCross
 	st.freeKeys = *optFreeKeys
+	st.showLegend = !*optNoLegend
 	st.verbose = *optDebug
 
 	mutex, err := acquireSingleInstance()
@@ -363,4 +374,15 @@ func resolveKeyToVK(name string) (int32, error) {
 	}
 	return 0, fmt.Errorf("tecla no soportada para toggle: %q. Use F1-F24, Pause, ScrollLock, "+
 		"Insert, Home, End, PageUp, PageDown, Space, las flechas o una letra", name)
+}
+
+// toString convierte un valor de recover() en texto para el log.
+func toString(v any) string {
+	switch t := v.(type) {
+	case string:
+		return t
+	case error:
+		return t.Error()
+	}
+	return fmt.Sprintf("%v", v)
 }

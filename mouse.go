@@ -41,6 +41,7 @@ type appState struct {
 	showCross  bool
 	verbose    bool
 	freeKeys   bool // en modo cursor, dejar pasar todas las teclas
+	showLegend bool // mostrar la leyenda al activar el modo cursor
 
 	lastActivity time.Time
 
@@ -54,6 +55,8 @@ type appState struct {
 }
 
 var lastPollLog = time.Time{}
+
+var nowNano = func() int64 { return time.Now().UnixNano() }
 
 var st = &appState{speed: 12, turbo: 60, autoExit: 45, showCross: true}
 
@@ -324,6 +327,8 @@ func tick() {
 			return
 		}
 	}
+	legendActive()
+
 	// Watchdog: si un keyup se perdio (ventana elevada, cambio de foco), el
 	// boton no puede quedar pegado presionado en Windows.
 	if st.btnDown && !keyTracked(vkSpace) {
@@ -385,10 +390,12 @@ func setCursorMode(on bool) {
 	if !on {
 		releaseAll()
 		hideIndicator()
+		hideLegend()
 	} else {
 		st.lastActivity = time.Now()
 		clearTrackedKeys()
 		showIndicator()
+		showLegend()
 	}
 	updateTray()
 	debugf("modo cursor: %v", on)
