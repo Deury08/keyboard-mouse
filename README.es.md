@@ -39,9 +39,12 @@ mouse-teclado.exe -selftest
 
 - **Modo teclado** — todo se comporta normal. Escribís con `W`, `A`, `S`, `D` y
   `Espacio` sin que pase nada raro.
-- **Modo cursor** — el puntero se mueve con las teclas. Solo pasan las teclas del
-  mouse; todo lo demás se traga, así que no se escribe nada ni se activa nada por
-  accidente en la app de adelante.
+- **Modo cursor** — el puntero se mueve con las teclas. Las teclas sueltas se
+  tragan, así que no se escribe nada ni se activa nada por accidente en la app de
+  adelante, pero **toda combinación con `Ctrl`, `Shift` o `Alt` sigue
+  funcionando**: seleccionás texto con el mouse y después `Ctrl+A`, `Ctrl+C`,
+  `Ctrl+V`, `Ctrl+X`, `Ctrl+E`, `Ctrl+Z`, como si teclado y mouse fueran el mismo
+  aparato.
 
 Tres formas de volver al modo teclado:
 
@@ -73,6 +76,7 @@ click derecho abre el menú (activar/desactivar, ayuda, salir).
 | `Alt` + `Inicio` / `Fin` | Scroll al extremo |
 | `Alt` + `Shift` + `←` / `→` | Scroll horizontal |
 | `Ctrl+Alt+Inicio` / `Ctrl+Alt+Fin` | Saltar a una esquina de la pantalla |
+| `Ctrl`+`A`/`C`/`V`/`X`/`E`/`Z` y cualquier otra combinación | Seleccionar, copiar, pegar, cortar, editar, deshacer |
 | `Ctrl+Alt+H` | Ayuda en pantalla |
 | `Ctrl+Alt+Q` | Cerrar la app |
 
@@ -98,14 +102,18 @@ el secundario. La versión final mejora dos cosas:
   como se pidió, pero solo dentro del modo cursor para no romper combinaciones
   que usan editores y terminales.
 
-### Por qué el modo cursor traga el resto de las teclas
+### Por qué el modo cursor traga las teclas sueltas pero deja los atajos
 
 Pedido explícito: en modo mouse no debe funcionar ninguna otra tecla, "para que
 no haya errores". Así, un `C` suelto no borra una palabra ni dispara un atajo de
 la app de adelante.
 
-Los modificadores (`Ctrl`, `Alt`, `Shift`) son la excepción y siempre pasan: si
-se tragan, Windows cree que quedaron pegados y rompe cualquier combinación.
+Lo que se bloquea es la **tecla suelta**. Cualquier combinación que lleve `Ctrl`,
+`Shift` o `Alt` pasa de largo, porque eso es lo que hace la herramienta usable con
+las dos manos en un solo aparato: seleccionás texto con el mouse — arrastrando, o
+click antes y `Shift`+click después — y después apretás `Ctrl+C` para copiar o
+`Ctrl+V` para pegar. Los modificadores sueltos también pasan siempre: si se
+tragaran, Windows creería que quedaron pegados y rompería cualquier combinación.
 
 Si preferís el comportamiento anterior, arrancala con `-freekeys`.
 

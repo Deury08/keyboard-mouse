@@ -209,6 +209,14 @@ func hookTrampoline(nCode int32, wParam, lParam uintptr) uintptr {
 		if isMouseModeKey(vk) {
 			return callNextHookEx(hookHandle, nCode, wParam, lParam)
 		}
+		// Cualquier combinacion con Ctrl, Shift o Alt pasa: asi se puede
+		// seleccionar con el mouse y despues copiar o pegar (Ctrl+A, Ctrl+C,
+		// Ctrl+V, Ctrl+X, Ctrl+E, Ctrl+Z...) como si el teclado y el mouse
+		// estuvieran juntos. Lo que se traga sigue siendo la tecla suelta, que
+		// es la que se escapa por accidente.
+		if ctrl || shift || alt {
+			return callNextHookEx(hookHandle, nCode, wParam, lParam)
+		}
 		if isDown {
 			logf("tecla vk=%d tragada por el modo mouse", vk)
 		}

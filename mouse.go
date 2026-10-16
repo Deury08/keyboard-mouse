@@ -384,6 +384,9 @@ func toggleCursorMode() { setCursorMode(!st.cursorMode) }
 
 func showHelp() {
 	text := "Ctrl+Alt+M   cambiar teclado <-> mouse\n" +
+		"Esc   salir del modo cursor\n" +
+		"Ctrl+A/C/V/X/E/Z  seleccionar, copiar, pegar, editar\n" +
+		"(las combinaciones con Ctrl, Shift o Alt funcionan)\n" +
 		"Flechas / WASD  mover    Shift = turbo    Ctrl = 1 px\n" +
 		"Espacio  click izq.   Shift+Espacio  der.   Ctrl+Espacio  medio\n" +
 		"Tocar Espacio 2-3 veces = doble / triple click\n" +

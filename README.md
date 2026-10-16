@@ -39,9 +39,11 @@ mouse-teclado.exe -selftest
 
 - **Keyboard mode** — everything behaves normally. You type with `W`, `A`, `S`,
   `D` and `Space` and nothing weird happens.
-- **Cursor mode** — the pointer moves with the keyboard. Only the mouse keys get
-  through; everything else is swallowed, so nothing gets typed and nothing gets
-  triggered by accident in whatever app is in front.
+- **Cursor mode** — the pointer moves with the keyboard. Bare keys are swallowed,
+  so nothing gets typed and nothing gets triggered by accident in whatever app is
+  in front, but **every combination with `Ctrl`, `Shift` or `Alt` still works**:
+  select text with the mouse and then `Ctrl+A`, `Ctrl+C`, `Ctrl+V`, `Ctrl+X`,
+  `Ctrl+E`, `Ctrl+Z`, as if keyboard and mouse were the same device.
 
 Three ways back to keyboard mode:
 
@@ -73,6 +75,7 @@ the menu (toggle, help, quit).
 | `Alt` + `Home` / `End` | Scroll to the extreme |
 | `Alt` + `Shift` + `←` / `→` | Horizontal scroll |
 | `Ctrl+Alt+Home` / `Ctrl+Alt+End` | Jump to a screen corner |
+| `Ctrl`+`A`/`C`/`V`/`X`/`E`/`Z` and any other combination | Select, copy, paste, cut, edit, undo |
 | `Ctrl+Alt+H` | On-screen help |
 | `Ctrl+Alt+Q` | Quit |
 
@@ -98,15 +101,18 @@ the secondary one. The final version improves two things:
   as requested, but only inside cursor mode so they do not steal combinations that
   editors and terminals rely on.
 
-### Why cursor mode swallows every other key
+### Why cursor mode swallows bare keys but keeps shortcuts
 
 Explicit request: in mouse mode no other key should work, "so there are no
 mistakes". That way a stray `C` does not delete a word or fire a shortcut in the
 app in front of you.
 
-Modifiers (`Ctrl`, `Alt`, `Shift`) are the exception and always pass through: if
-they were swallowed, Windows would think they are stuck and break every
-combination.
+What is blocked is the **bare key**. Any combination carrying `Ctrl`, `Shift` or
+`Alt` passes straight through, because that is what makes the tool usable with
+both hands on one device: you select text with the mouse — drag, or click before
+and `Shift`+click after — and then press `Ctrl+C` to copy, `Ctrl+V` to paste.
+Modifiers on their own also always pass, since swallowing them would make Windows
+think they are stuck and break every combination.
 
 To get the previous behaviour back, run it with `-freekeys`.
 
