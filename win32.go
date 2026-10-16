@@ -61,27 +61,31 @@ const (
 
 // Virtual keys usados.
 const (
-	vkShift   = 0x10
-	vkControl = 0x11
-	vkMenu    = 0x12
-	vkPause   = 0x13
-	vkEscape  = 0x1B
-	vkSpace   = 0x20
-	vkPrior   = 0x21
-	vkNext    = 0x22
-	vkEnd     = 0x23
-	vkHome    = 0x24
-	vkLeft    = 0x25
-	vkUp      = 0x26
-	vkRight   = 0x27
-	vkDown    = 0x28
-	vkKeyA    = 0x41
-	vkKeyD    = 0x44
-	vkKeyH    = 0x48
-	vkKeyM    = 0x4D
-	vkKeyQ    = 0x51
-	vkKeyS    = 0x53
-	vkKeyW    = 0x57
+	vkShift    = 0x10
+	vkControl  = 0x11
+	vkMenu     = 0x12
+	vkPause    = 0x13
+	vkEscape   = 0x1B
+	vkOemPlus  = 0xBB // la tecla + del teclado numerico
+	vkOemMinus = 0xBD // la tecla - del teclado numerico
+	vkSpace    = 0x20
+	vkPrior    = 0x21
+	vkNext     = 0x22
+	vkEnd      = 0x23
+	vkHome     = 0x24
+	vkLeft     = 0x25
+	vkUp       = 0x26
+	vkRight    = 0x27
+	vkDown     = 0x28
+	vkKeyA     = 0x41
+	vkKeyD     = 0x44
+	vkKeyH     = 0x48
+	vkKeyF     = 0x46
+	vkKeyM     = 0x4D
+	vkKeyZ     = 0x5A
+	vkKeyQ     = 0x51
+	vkKeyS     = 0x53
+	vkKeyW     = 0x57
 )
 
 // Structs de Win32.

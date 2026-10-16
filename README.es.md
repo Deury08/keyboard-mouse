@@ -64,8 +64,9 @@ click derecho abre el menú (activar/desactivar, ayuda, salir).
 | Tecla | Acción |
 | --- | --- |
 | Flechas, `W` `A` `S` `D` | Mover el puntero |
-| `Shift` + mover | Turbo (rápido) |
-| `Ctrl` + mover | Paso a 1 px, para apuntar justo |
+| Mantener `F` mientras movés | Turbo (rápido) |
+| Mantener `Z` mientras movés | Paso a 1 px, para apuntar justo |
+| `+` / `-` | Subir o bajar la velocidad base |
 | `Espacio` | Click primario |
 | `Shift` + `Espacio` | Click secundario (menú contextual) |
 | `Ctrl` + `Espacio` | Click medio |
@@ -77,6 +78,7 @@ click derecho abre el menú (activar/desactivar, ayuda, salir).
 | `Alt` + `Shift` + `←` / `→` | Scroll horizontal |
 | `Ctrl+Alt+Inicio` / `Ctrl+Alt+Fin` | Saltar a una esquina de la pantalla |
 | `Ctrl`+`A`/`C`/`V`/`X`/`E`/`Z` y cualquier otra combinación | Seleccionar, copiar, pegar, cortar, editar, deshacer |
+| `Shift`+click | Amplía la selección desde el último click |
 | `Ctrl+Alt+H` | Ayuda en pantalla |
 | `Ctrl+Alt+Q` | Cerrar la app |
 
@@ -101,6 +103,21 @@ el secundario. La versión final mejora dos cosas:
 - **Click secundario y medio** quedan en `Shift+Espacio` y `Ctrl+Espacio`, tal
   como se pidió, pero solo dentro del modo cursor para no romper combinaciones
   que usan editores y terminales.
+
+### Por qué la velocidad tiene teclas propias
+
+`Shift` y `Ctrl` arrancaron como modificadores de velocidad — `Shift` para turbo y
+`Ctrl` para paso a 1 px — pero son justamente las teclas que llevan la selección
+con `Shift`+click y la copia con `Ctrl+C`. Usarlas para las dos cosas las dejaba
+ambiguas.
+
+Por eso la velocidad se mudó a teclas propias: mantener `F` para turbo, mantener
+`Z` para 1 px, y `+` / `-` para ajustar la velocidad base (que además se ve en el
+tooltip de la bandeja). `Shift` y `Ctrl` quedan libres para lo que la app de
+adelante espere.
+
+`+` y `-` solo se interceptan solas. Con `Ctrl` encima pasan de largo, así que
+atajos como `Ctrl+=` (zoom en casi todas las apps) siguen funcionando.
 
 ### Por qué el modo cursor traga las teclas sueltas pero deja los atajos
 
@@ -268,7 +285,7 @@ hay que llamar `ShowWindow` después, o la cruceta existe pero no se ve.
   pero el click no se registra. Se resuelve no corriendo esas apps elevadas.
 - **Pantalla segura de UAC:** es otra sesión de escritorio, no es controlable.
 - **Precisión:** el movimiento es por teclas presionadas cada 15 ms. Se siente
-  fluido, pero para apuntar con exactitud hay que usar `Ctrl` (pasos de 1 px).
+  fluido, pero para apuntar con exactitud hay que mantener `Z` (pasos de 1 px).
 - **Arranque automático por carpeta Inicio, no por registro:** en esta máquina
   las escrituras al registro hechas por procesos hijos se descartan en silencio e
   incluso llegan a romper el proceso. La carpeta Inicio funciona siempre.

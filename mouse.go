@@ -294,6 +294,19 @@ func releaseButtonAt() {
 	st.btnKind = 0
 }
 
+// adjustSpeed cambia la velocidad base con las teclas + y -.
+func adjustSpeed(delta int) {
+	st.speed += delta
+	if st.speed < 1 {
+		st.speed = 1
+	}
+	if st.speed > 200 {
+		st.speed = 200
+	}
+	logf("velocidad base: %d px por paso", st.speed)
+	updateTray()
+}
+
 func abs32(v int32) int32 {
 	if v < 0 {
 		return -v
@@ -346,15 +359,16 @@ func tick() {
 		return
 	}
 
-	// los modificadores se leen del estado asincrono: son los que mas expuesto
-	// queda a quedar "pegado" si un keyup no llega (ventana elevada de por medio)
-	fast := keyDown(vkShift)
-	slow := keyDown(vkControl) && !keyTracked(vkSpace) && !fast
+	// Velocidad con teclas dedicadas: F es turbo y Z es paso a 1 px.
+	// Shift y Ctrl quedan libres para los atajos de la app de adelante, que es
+	// lo que hace util tener teclado y mouse en el mismo aparato.
+	fast := keyTracked(vkKeyF)
+	precise := keyTracked(vkKeyZ)
 	step := st.speed
 	if fast {
 		step = st.turbo
 	}
-	if slow {
+	if precise {
 		step = 1
 	}
 
@@ -387,7 +401,9 @@ func showHelp() {
 		"Esc   salir del modo cursor\n" +
 		"Ctrl+A/C/V/X/E/Z  seleccionar, copiar, pegar, editar\n" +
 		"(las combinaciones con Ctrl, Shift o Alt funcionan)\n" +
-		"Flechas / WASD  mover    Shift = turbo    Ctrl = 1 px\n" +
+		"Flechas / WASD  mover\n" +
+		"F (pisado) = turbo    Z (pisado) = paso a 1 px\n" +
+		"+ y -  cambian la velocidad base\n" +
 		"Espacio  click izq.   Shift+Espacio  der.   Ctrl+Espacio  medio\n" +
 		"Tocar Espacio 2-3 veces = doble / triple click\n" +
 		"Mantener Espacio + mover = arrastrar (drag & drop)\n" +

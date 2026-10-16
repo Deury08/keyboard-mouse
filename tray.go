@@ -83,9 +83,9 @@ func updateTray() {
 	if !trayPresent {
 		return
 	}
-	tip := "Mouse por teclado - modo cursor OFF"
+	tip := "Mouse por teclado - velocidad " + itoa(st.speed) + " px - modo cursor OFF"
 	if st.cursorMode {
-		tip = "Mouse por teclado - modo cursor ON"
+		tip = "Mouse por teclado - velocidad " + itoa(st.speed) + " px - modo cursor ON"
 	}
 	nid := notifyIconData{
 		CbSize: uint32(unsafe.Sizeof(notifyIconData{})),
@@ -191,4 +191,27 @@ func showWelcomeBalloon() {
 	copy(nid.SzInfo[:], utf16("Listo. Ctrl+Alt+M cambia teclado <-> mouse."))
 	r, _, _ := pShellNotifyIcon.Call(nimModify, uintptr(unsafe.Pointer(&nid)))
 	debugf("balloon de bienvenida: %v", r != 0)
+}
+
+// itoa evita importar strconv para un solo numero.
+func itoa(n int) string {
+	if n == 0 {
+		return "0"
+	}
+	neg := n < 0
+	if neg {
+		n = -n
+	}
+	var buf [8]byte
+	i := len(buf)
+	for n > 0 {
+		i--
+		buf[i] = byte('0' + n%10)
+		n /= 10
+	}
+	if neg {
+		i--
+		buf[i] = '-'
+	}
+	return string(buf[i:])
 }

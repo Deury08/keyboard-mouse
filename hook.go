@@ -132,6 +132,26 @@ func hookTrampoline(nCode int32, wParam, lParam uintptr) uintptr {
 	if isDown {
 		repeat := k.Flags&1 != 0
 
+		// Velocidad: + y - cambian la velocidad base, F turbo y Z precision.
+		// Solo cuando la tecla va sola: con Ctrl/Shift/Alt encima pasa de largo
+		// para no romper atajos como Ctrl+= (zoom) o Ctrl+- .
+		if !ctrl && !shift && !alt {
+			switch vk {
+			case vkOemPlus:
+				if !repeat {
+					adjustSpeed(speedStep)
+				}
+				return 1
+			case vkOemMinus:
+				if !repeat {
+					adjustSpeed(-speedStep)
+				}
+				return 1
+			case vkKeyF, vkKeyZ:
+				return 1 // solo existen como modificadores de velocidad
+			}
+		}
+
 		// volver a un punto conocido si el cursor se perdio
 		if ctrl && alt && (vk == vkHome || vk == vkEnd) {
 			if !repeat {
@@ -235,6 +255,9 @@ func isModifierKey(vk int32) bool {
 	}
 	return false
 }
+
+// speedStep es cuanto sube o baja la velocidad con cada pulsacion de + o -.
+const speedStep = 3
 
 // isMouseModeKey: en modo mouse solo estas teclas hacen algo.
 func isMouseModeKey(vk int32) bool {

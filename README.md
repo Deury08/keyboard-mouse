@@ -63,8 +63,9 @@ the menu (toggle, help, quit).
 | Key | Action |
 | --- | --- |
 | Arrow keys, `W` `A` `S` `D` | Move the pointer |
-| `Shift` + move | Turbo (fast) |
-| `Ctrl` + move | 1 px steps, for precise aiming |
+| Hold `F` while moving | Turbo (fast) |
+| Hold `Z` while moving | 1 px steps, for precise aiming |
+| `+` / `-` | Make the base speed faster or slower |
 | `Space` | Primary click |
 | `Shift` + `Space` | Secondary click (context menu) |
 | `Ctrl` + `Space` | Middle click |
@@ -76,6 +77,7 @@ the menu (toggle, help, quit).
 | `Alt` + `Shift` + `←` / `→` | Horizontal scroll |
 | `Ctrl+Alt+Home` / `Ctrl+Alt+End` | Jump to a screen corner |
 | `Ctrl`+`A`/`C`/`V`/`X`/`E`/`Z` and any other combination | Select, copy, paste, cut, edit, undo |
+| `Shift`+click | Extend the selection from the last click |
 | `Ctrl+Alt+H` | On-screen help |
 | `Ctrl+Alt+Q` | Quit |
 
@@ -100,6 +102,20 @@ the secondary one. The final version improves two things:
 - **Secondary and middle click** stay on `Shift+Space` and `Ctrl+Space`, exactly
   as requested, but only inside cursor mode so they do not steal combinations that
   editors and terminals rely on.
+
+### Why speed lives on its own keys
+
+`Shift` and `Ctrl` started out as the speed modifiers — `Shift` for turbo, `Ctrl`
+for pixel-perfect steps — but those are exactly the keys that carry `Shift+click`
+selection and `Ctrl+C` copy. Using them for both made them ambiguous.
+
+So speed moved to its own keys: hold `F` for turbo, hold `Z` for 1 px steps, and
+`+` / `-` to tune the base speed (also visible in the tray tooltip). `Shift` and
+`Ctrl` are now free for whatever the app in front expects.
+
+`+` and `-` are only intercepted when pressed on their own. With `Ctrl` on top,
+they pass straight through, so shortcuts like `Ctrl+=` (zoom in most apps) keep
+working.
 
 ### Why cursor mode swallows bare keys but keeps shortcuts
 
@@ -266,7 +282,7 @@ exists but is invisible.
   registered. The fix is not running those apps elevated.
 - **UAC secure desktop:** it is a different desktop session and cannot be driven.
 - **Precision:** movement happens in 15 ms steps. It feels smooth, but for exact
-  aiming use `Ctrl` (1 px steps).
+  aiming hold `Z` (1 px steps).
 - **Autostart uses the Startup folder, not the registry:** on this machine,
   registry writes made by child processes are silently discarded and can even
   crash the process. The Startup folder always works.
